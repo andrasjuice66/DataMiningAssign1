@@ -14,11 +14,12 @@ df = pd.read_csv("out.csv")
 
 # Drop non-numeric columns
 # Shift the mood column forward by 1
-df['mood'] = df['mood'].shift(-1)
 
-# Drop NaN values resulting from shifting
+df['mood_shifted'] = df.groupby('id')['mood'].shift(1)
+df.dropna(subset=['mood_shifted'], inplace=True)
 df.sort_values("date", inplace=True)
 df.dropna(inplace=True)
+df.reset_index(drop=True, inplace=True)
 
 
 # Assuming test_targets and test_predictions are the expected and predicted quantiles
@@ -29,19 +30,19 @@ df.dropna(inplace=True)
 
 # Normalize features
 scaler = StandardScaler()
-non_numeric_columns = ['id', 'date','screen', 'Unnamed: 0',]
+non_numeric_columns = ['id', 'date','screen','mood' ,'Unnamed: 0',]
 df.drop(columns=non_numeric_columns, inplace=True)
 features = df.drop(columns=['mood_quantiles']).values.astype(np.float32)
 features = scaler.fit_transform(features)
 
 # Map mood quantiles to integer labels
-quantile_mapping = {'Q1': 0, 'Q2': 1, 'Q3': 2, 'Q4': 3}
+quantile_mapping = {'Q1': 0, 'Q2': 1, 'Q3': 2}
 target_quantiles = df['mood_quantiles'].map(quantile_mapping).values.astype(np.int64)
 
 
 
 # Define new output size for classification
-output_size = 4 
+output_size = 3
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Define PyTorch Dataset
@@ -76,7 +77,7 @@ class LSTMClassification(nn.Module):
 
 # Define hyperparameters
 input_size = features.shape[1]
-hidden_size = 64
+hidden_size = 128
 num_layers = 3
 learning_rate = 0.001
 num_epochs = 50

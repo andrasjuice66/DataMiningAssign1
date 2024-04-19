@@ -16,7 +16,7 @@ non_numeric_columns = ['id', 'date', 'mood_quantiles','screen', 'Unnamed: 0',]
 df.drop(columns=non_numeric_columns, inplace=True)
 
 # Shift the mood column forward by 1
-df['mood'] = df['mood'].shift(-1)
+df['mood'] = df['mood'].shift(1)
 
 # Drop NaN values resulting from shifting
 df.dropna(inplace=True)
@@ -61,9 +61,9 @@ class LSTM(nn.Module):
 # Define hyperparameters
 input_size = features.shape[1]
 hidden_size = 64
-num_layers = 3
+num_layers = 2
 output_size = 1
-learning_rate = 0.001
+learning_rate = 0.0005
 num_epochs = 50
 batch_size = 64
 
