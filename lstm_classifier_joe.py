@@ -4,7 +4,9 @@ import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 from torch.utils.data import DataLoader, Dataset
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
@@ -15,7 +17,7 @@ df = pd.read_csv("out.csv")
 # Drop non-numeric columns
 # Shift the mood column forward by 1
 
-df['mood_shifted'] = df.groupby('id')['mood'].shift(1)
+df['mood_shifted'] = df.groupby('id')['mood'].shift(-1)  # Assuming you want to predict the next instance
 df.dropna(subset=['mood_shifted'], inplace=True)
 df.sort_values("date", inplace=True)
 df.dropna(inplace=True)
@@ -77,10 +79,10 @@ class LSTMClassification(nn.Module):
 
 # Define hyperparameters
 input_size = features.shape[1]
-hidden_size = 128
+hidden_size = 64
 num_layers = 3
 learning_rate = 0.001
-num_epochs = 50
+num_epochs = 30
 batch_size = 64
 
 # Split data using TimeSeriesSplit

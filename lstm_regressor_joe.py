@@ -61,10 +61,10 @@ class LSTM(nn.Module):
 # Define hyperparameters
 input_size = features.shape[1]
 hidden_size = 64
-num_layers = 2
+num_layers = 3
 output_size = 1
-learning_rate = 0.0005
-num_epochs = 50
+learning_rate = 0.001
+num_epochs = 30
 batch_size = 64
 
 # Define device
@@ -123,9 +123,9 @@ for fold, (train_index, test_index) in enumerate(tscv.split(features)):
             all_test_losses.append(test_loss)
 
         
-        print(f'Test Loss: {test_loss:.4f}')
+    
     fold_losses.append((train_losses, test_losses))
-
+print(f'Test Loss: {test_loss:.4f}')
     # Plot losses for this fold
 
 
