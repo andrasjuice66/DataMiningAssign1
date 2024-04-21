@@ -20,10 +20,11 @@ df.drop(columns=non_numeric_columns, inplace=True)
 # Drop NaN values resulting from shifting
 df.dropna(inplace=True)
 target = df['mood'].values.astype(np.float32)
-df['mood'] = df['mood'].shift(1)
+df['mood'] = df['mood'].shift(-1)
 
 # Define features and target
 features = df.drop(columns=['mood']).values.astype(np.float32)
+
 
 
 
