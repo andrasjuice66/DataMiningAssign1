@@ -17,7 +17,7 @@ df = pd.read_csv("out.csv")
 # Drop non-numeric columns
 # Shift the mood column forward by 1
 
-df['mood_shifted'] = df.groupby('id')['mood'].shift(-1)  # Assuming you want to predict the next instance
+df['mood_shifted'] = df.groupby('id')['mood'].shift(1)  # Assuming you want to predict the next instance
 df.dropna(subset=['mood_shifted'], inplace=True)
 df.sort_values("date", inplace=True)
 df.dropna(inplace=True)

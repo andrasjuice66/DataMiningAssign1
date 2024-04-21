@@ -16,15 +16,16 @@ non_numeric_columns = ['id', 'date', 'mood_quantiles','screen', 'Unnamed: 0',]
 df.drop(columns=non_numeric_columns, inplace=True)
 
 # Shift the mood column forward by 1
-df['mood'] = df['mood'].shift(1)
 
 # Drop NaN values resulting from shifting
 df.dropna(inplace=True)
-
+target = df['mood'].values.astype(np.float32)
+df['mood'] = df['mood'].shift(1)
 
 # Define features and target
 features = df.drop(columns=['mood']).values.astype(np.float32)
-target = df['mood'].values.astype(np.float32)
+
+
 
 # Normalize features
 scaler = StandardScaler()
@@ -60,12 +61,12 @@ class LSTM(nn.Module):
 
 # Define hyperparameters
 input_size = features.shape[1]
-hidden_size = 64
+hidden_size = 128
 num_layers = 3
 output_size = 1
 learning_rate = 0.001
 num_epochs = 30
-batch_size = 64
+batch_size = 128
 
 # Define device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
