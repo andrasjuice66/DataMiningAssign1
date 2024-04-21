@@ -17,7 +17,7 @@ df = pd.read_csv("out.csv")
 # Drop non-numeric columns
 # Shift the mood column forward by 1
 
-df['mood_shifted'] = df.groupby('id')['mood'].shift(1)  # Assuming you want to predict the next instance
+df['mood_shifted'] = df.groupby('id')['mood'].shift(-1)  # Assuming you want to predict the next instance
 df.dropna(subset=['mood_shifted'], inplace=True)
 df.sort_values("date", inplace=True)
 df.dropna(inplace=True)
@@ -79,11 +79,11 @@ class LSTMClassification(nn.Module):
 
 # Define hyperparameters
 input_size = features.shape[1]
-hidden_size = 64
+hidden_size = 128
 num_layers = 3
 learning_rate = 0.001
 num_epochs = 30
-batch_size = 64
+batch_size = 128
 
 # Split data using TimeSeriesSplit
 tscv = TimeSeriesSplit(n_splits=5)
@@ -161,4 +161,5 @@ sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
 plt.title('Confusion Matrix')
 plt.ylabel('Actual Quantiles')
 plt.xlabel('Predicted Quantiles')
+plt.savefig("confusionMatrixClassifier.png")
 plt.show()

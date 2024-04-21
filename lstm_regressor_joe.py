@@ -154,6 +154,7 @@ plt.xlabel('Time')
 plt.ylabel('Mood')
 plt.title('Predicted vs Actual Mood')
 plt.legend()
+plt.savefig("actualPredictedMood.png")
 plt.show()
 
 
@@ -172,4 +173,5 @@ for fold in range(tscv.n_splits):
     plt.ylabel('Loss')
     plt.title(f'Training and Test Loss During Fold {fold + 1}')
     plt.legend()
+    plt.savefig(f'LossDuringFold{fold+1}.png')
     plt.show()
